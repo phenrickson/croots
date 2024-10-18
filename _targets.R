@@ -9,14 +9,22 @@ library(targets)
 
 # Set target options:
 tar_option_set(
-  packages = c("dplyr", "googlesheets4")
+  packages = c("dplyr", "tidyr", "purrr", "ggplot2", "googlesheets4")
 )
 
-# Run the R scripts in the R/ folder with your custom functions:
+# source functions
 tar_source("R")
-# tar_source("other_functions.R") # Source other scripts as needed.
 
-# Replace the target list below with your own:
+# pipeline
 list(
-  tar_target()
+  tar_target(
+    recruits_raw,
+    load_recruits()
+  ),
+  tar_target(
+    recruits_tidied,
+    recruits_raw |>
+      tidy_recruits() |>
+      tidy_overall()
+  )
 )
